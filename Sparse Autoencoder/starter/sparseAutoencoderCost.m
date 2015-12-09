@@ -66,8 +66,8 @@ cost = cost + regularization + spasityPenalty;
 
 % gradients by Back Propagation Algorithm with regularization and spasity penalty
 Delta3 = (A3-data).*A3.*(1-A3);
-sparsityTermInDelte2 = repmat(beta*(-sparsityParam./averageActivationVec+(1-sparsityParam)./(1-averageActivationVec)), 1, m);
-Delta2 = (W2'*Delta3 + sparsityTermInDelte2).*A2.*(1-A2);
+sparsityTermInDelta2 = repmat(beta*(-sparsityParam./averageActivationVec+(1-sparsityParam)./(1-averageActivationVec)), 1, m);
+Delta2 = (W2'*Delta3 + sparsityTermInDelta2).*A2.*(1-A2);
 
 W1grad = Delta2*data'/m + lambda*W1;
 W2grad = Delta3*A2'/m + lambda*W2;
