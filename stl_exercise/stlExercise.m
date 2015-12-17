@@ -21,7 +21,6 @@ sparsityParam = 0.1; % desired average activation of the hidden units.
 		             %  in the lecture notes). 
 lambda = 3e-3;       % weight decay parameter       
 beta = 3;            % weight of sparsity penalty term   
-maxIter = 400;
 
 %% ======================================================================
 %  STEP 1: Load data from the MNIST database
@@ -76,7 +75,7 @@ autoencoderOptions.Method = 'lbfgs';  % Here, we use L-BFGS to optimize our cost
                                       % need a function pointer with two outputs: the
                                       % function value and the gradient. In our problem,
                                       % sparseAutoencoderCost.m satisfies this.
-autoencoderOptions.maxIter = maxIter;	  % Maximum number of iterations of L-BFGS to run 
+autoencoderOptions.maxIter = 400;	  % Maximum number of iterations of L-BFGS to run 
 autoencoderOptions.display = 'on';
 
 if exist('opttheta.mat','file')==2
@@ -126,9 +125,11 @@ testFeatures = feedForwardAutoencoder(opttheta, hiddenSize, inputSize, ...
 
 softmaxOptions.maxIter = 100;
 lambdaSoftmax = 1e-4; % Weight decay parameter for Softmax
+trainNumber = size(trainData,2);
 
-softmaxModel = softmaxTrain(hiddenSize, numLabels, lambdaSoftmax, trainFeatures, trainLabels, softmaxOptions);  % learn by features
-%softmaxModel = softmaxTrain(inputSize, numLabels, lambdaSoftmax, trainData, trainLabels, softmaxOptions);  % learn by raw data
+% softmaxTrain 默认数据中已包含截距项
+%softmaxModel = softmaxTrain(hiddenSize+1, numLabels, lambdaSoftmax, [trainFeatures;ones(1,trainNumber)], trainLabels, softmaxOptions);  % learn by features
+softmaxModel = softmaxTrain(inputSize+1, numLabels, lambdaSoftmax, [trainData;ones(1,trainNumber)], trainLabels, softmaxOptions);  % learn by raw data
 
 
 %% -----------------------------------------------------
@@ -140,9 +141,11 @@ softmaxModel = softmaxTrain(hiddenSize, numLabels, lambdaSoftmax, trainFeatures,
 %% ----------------- YOUR CODE HERE ----------------------
 % Compute Predictions on the test set (testFeatures) using softmaxPredict
 % and softmaxModel
+testNumber = size(testData,2);
 
-[pred] = softmaxPredict(softmaxModel, testFeatures);  % predict by test features
-%[pred] = softmaxPredict(softmaxModel, testData);  % predict by test raw data
+% softmaxPredict 默认数据中已包含截距项
+%[pred] = softmaxPredict(softmaxModel, [testFeatures;ones(1,testNumber)]);  % predict by test features
+[pred] = softmaxPredict(softmaxModel, [testData;ones(1,testNumber)]);  % predict by test raw data
 
 
 %% -----------------------------------------------------
