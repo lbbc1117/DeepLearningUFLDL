@@ -128,8 +128,8 @@ lambdaSoftmax = 1e-4; % Weight decay parameter for Softmax
 trainNumber = size(trainData,2);
 
 % softmaxTrain 默认数据中已包含截距项
-%softmaxModel = softmaxTrain(hiddenSize+1, numLabels, lambdaSoftmax, [trainFeatures;ones(1,trainNumber)], trainLabels, softmaxOptions);  % learn by features
-softmaxModel = softmaxTrain(inputSize+1, numLabels, lambdaSoftmax, [trainData;ones(1,trainNumber)], trainLabels, softmaxOptions);  % learn by raw data
+softmaxModel = softmaxTrain(hiddenSize+1, numLabels, lambdaSoftmax, [trainFeatures;ones(1,trainNumber)], trainLabels, softmaxOptions);  % learn by features
+%softmaxModel = softmaxTrain(inputSize+1, numLabels, lambdaSoftmax, [trainData;ones(1,trainNumber)], trainLabels, softmaxOptions);  % learn by raw data
 
 
 %% -----------------------------------------------------
@@ -144,8 +144,8 @@ softmaxModel = softmaxTrain(inputSize+1, numLabels, lambdaSoftmax, [trainData;on
 testNumber = size(testData,2);
 
 % softmaxPredict 默认数据中已包含截距项
-%[pred] = softmaxPredict(softmaxModel, [testFeatures;ones(1,testNumber)]);  % predict by test features
-[pred] = softmaxPredict(softmaxModel, [testData;ones(1,testNumber)]);  % predict by test raw data
+[pred] = softmaxPredict(softmaxModel, [testFeatures;ones(1,testNumber)]);  % predict by test features
+%[pred] = softmaxPredict(softmaxModel, [testData;ones(1,testNumber)]);  % predict by test raw data
 
 
 %% -----------------------------------------------------
