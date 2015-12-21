@@ -65,19 +65,22 @@ groundTruth = full(sparse(labels, 1:M, 1)); % numClasses×M
 
 % 4-layer NN: { 1-input, 2-hiddenLayer1, 3-hiddenLayer2, 4-output }
 
+% 使用前向传播计算每层的输出
 Z2 = stack{1}.w*data + repmat(stack{1}.b,1,M);  % hiddenSizeL1×M
 A2 = sigmoid(Z2);                               % output of hidden layer 1
 Z3 = stack{2}.w*A2 + repmat(stack{2}.b,1,M);    % hiddenSizeL2×M
 A3 = sigmoid(Z3);                               % output of hidden layer 2
-% output the whole network
+% output of the whole network
 A4 = softmaxProbability( softmaxTheta, [A3;ones(1,M)] );    % numClasses×M
 
 cost = (-1/M)*sum(sum(log(A4).*groundTruth)) + (lambda/2)*sum(sum(softmaxTheta.^2));
 
+% 使用反向传播计算每层的残差
 Delta4 = A4-groundTruth;                                   % numClasses×M
 Delta3 = (softmaxTheta(:,1:end-1)'*Delta4).*A3.*(1-A3);    % hiddenSizeL2×M
 Delta2 = ((stack{2}.w)'*Delta3).*A2.*(1-A2);               % hiddenSizeL2×M
 
+% 使用残差计算偏导
 stackgrad{1}.w = Delta2*data'/M;
 stackgrad{1}.b = sum(Delta2,2)/M;
 stackgrad{2}.w = Delta3*A2'/M;
