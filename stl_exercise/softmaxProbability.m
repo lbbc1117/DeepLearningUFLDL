@@ -1,4 +1,4 @@
-function prob = computProbability( theta, data )
+function prob = softmaxProbability( theta, data )
 % theta k*(n+1)
 % data (n+1)*m
 
